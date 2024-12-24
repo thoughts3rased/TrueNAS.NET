@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueNAS.NET", "TrueNAS.NET\TrueNAS.NET.csproj", "{36940724-03FB-4CFE-90F4-A7D57AD19BAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueNAS.NET", "TrueNAS.NET\TrueNAS.NET.csproj", "{36940724-03FB-4CFE-90F4-A7D57AD19BAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueNAS.NET.Tests", "TrueNAS.NET.Tests\TrueNAS.NET.Tests.csproj", "{98AC4821-17FE-4BD3-98F9-6A8E8CB20B07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueNAS.NET.Tests", "TrueNAS.NET.Tests\TrueNAS.NET.Tests.csproj", "{98AC4821-17FE-4BD3-98F9-6A8E8CB20B07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{735F9D38-8758-49A6-853B-43906069668F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
