@@ -6,28 +6,27 @@ using System.Threading.Tasks;
 
 namespace TrueNAS.NET.Models.Connection
 {
-    public class ConnectionInformation
+    public class ConnectionInformation(string apiKey, string host, int port, bool secureConnection)
     {
-        public ConnectionInformation(string apiKey, string host, int port)
-        {
-            ApiKey = apiKey;
-            Host = host;
-            Port = port;
-        }
 
         /// <summary>
         /// API key for authenticating with the TrueNAS API
         /// </summary>
-        public string ApiKey { get; set; }
+        public string ApiKey { get; set; } = apiKey;
 
         /// <summary>
         /// IP or FQDN where the instance of TrueNAS is located, excluding the port
         /// </summary>
-        public string Host {  get; set; }
+        public string Host { get; set; } = host;
 
         /// <summary>
         /// Port that the TrueNAS API is listening on
         /// </summary>
-        public int Port { get; set; }
+        public int Port { get; set; } = port;
+
+        /// <summary>
+        /// Whether or not the connection is using HTTPS
+        /// </summary>
+        public bool SecureConnection { get; set; } = secureConnection;
     }
 }
