@@ -43,6 +43,13 @@ namespace TrueNAS.NET
 
         #region public methods
 
+        /// <summary>
+        /// Fetches a list of ZFS pools that currently exist on the server
+        /// </summary>
+        /// <param name="limit">How many items to fetch</param>
+        /// <param name="offset">How many items to offset the result set by</param>
+        /// <param name="sort">The property to sort the data by</param>
+        /// <returns>A list of Pools and their corresponding data</returns>
         public async Task<List<Pool>> GetPools(int limit = 0, int offset = 0, string sort = null)
         {
             string queryString = "?";
@@ -55,23 +62,87 @@ namespace TrueNAS.NET
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "api/v2.0/pool" + queryString);
 
-            var result = Client.Send(message);
+            HttpResponseMessage result = Client.Send(message);
 
             if (result.IsSuccessStatusCode)
             {
-                var resultContent = await result.Content.ReadAsStringAsync();
+                string resultContent = await result.Content.ReadAsStringAsync();
 
                 return JsonSerializer.Deserialize<List<Pool>>(resultContent, serializerOptions);
             }
             else
             {
-                switch (result.StatusCode)
-                {
-                    case System.Net.HttpStatusCode.Unauthorized:
-                        throw new TrueNASAuthorisationException("The server returned a 401 code. Check your API key and try again.");
-                    default:
-                        throw new HttpRequestException($"The server returned a {result.StatusCode} status with the response body of {await result.Content.ReadAsStringAsync()}");
-                }
+                throw await HandleUnsuccessfulResponse(result);
+            }
+        }
+
+        /// <summary>
+        /// Returns a count of the number of pools that exist on the server
+        /// </summary>
+        /// <returns>The number of pools that exist on the server</returns>
+        public async Task<int> GetPoolCount()
+        {
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "api/v2.0/pool?count=true");
+
+            HttpResponseMessage result = Client.Send(message);
+
+            if (result.IsSuccessStatusCode)
+            {
+                string responseString = await result.Content.ReadAsStringAsync();
+
+                return int.Parse(responseString);
+            }
+            else
+            {
+                throw await HandleUnsuccessfulResponse(result);
+            }
+        }
+
+        /// <summary>
+        /// Fetches a pool for a given pool ID
+        /// </summary>
+        /// <param name="id">The id of the target pool to fetch</param>
+        /// <returns>The requested pool, if found</returns>
+        public async Task<Pool> GetPool(int id)
+        {
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, $"api/v2.0/pool/id/{id}");
+
+            HttpResponseMessage result = Client.Send(message);
+
+            if (result.IsSuccessStatusCode)
+            {
+                string resultContent = await result.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<Pool>(resultContent, serializerOptions);
+            }
+            else
+            {      
+                throw await HandleUnsuccessfulResponse(result);
+            }
+        }
+
+        /// <summary>
+        /// Fetches a pool for a given pool name
+        /// </summary>
+        /// <param name="poolName">The name of the pool to fetch</param>
+        /// <returns>The requested pool, if found</returns>
+        public async Task<Pool> GetPool(string poolName)
+        {
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"api/v2.0/pool/get_instance_by_name");
+
+            message.Content = new StringContent($"\"{poolName}\"");
+
+            HttpResponseMessage result = Client.Send(message);
+
+            if (result.IsSuccessStatusCode)
+            {
+                string resultContent = await result.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<Pool>(resultContent, serializerOptions);
+            }
+            else
+            {
+                throw await HandleUnsuccessfulResponse(result);
             }
         }
 
@@ -96,6 +167,17 @@ namespace TrueNAS.NET
         #endregion
 
         #region private methods
+
+        public async Task<Exception> HandleUnsuccessfulResponse(HttpResponseMessage response)
+        {
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.Unauthorized:
+                    return new TrueNASAuthorisationException("The server returned a 401 code. Check your API key and try again.");
+                default:
+                    return new HttpRequestException($"The server returned a {response.StatusCode} status with the response body of {await response.Content.ReadAsStringAsync()}");
+            }
+        }
 
         #endregion
 

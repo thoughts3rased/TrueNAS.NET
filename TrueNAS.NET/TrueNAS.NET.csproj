@@ -4,10 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>TrueNAS.NET -  An API Wrapper For The TrueNAS API</Title>
+    <Description>An API wrapper for the TrueNAS API. Provides a clean and easy programatical way to interact with a TrueNAS server.
+</Description>
+    <Authors>thoughts3rased</Authors>
+    <PackageProjectUrl>https://github.com/thoughts3rased/TrueNAS.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thoughts3rased/TrueNAS.NET.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
 
 </Project>

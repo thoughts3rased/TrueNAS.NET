@@ -15,9 +15,9 @@ namespace TrueNAS.NET.Tests
         [Test]
         public void Test1()
         {
-            var result = client.GetPools().Result;
+            var result = client.GetPoolCount().Result;
 
-            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Zero);
         }
     }
 }
